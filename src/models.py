@@ -7,7 +7,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     is_active = db.Column(db.Boolean(), nullable=False)
-    # tabla_Favorites = db.relationship('Favorites', backref='user', lazy=True)
+    tabla_Favorites = db.relationship('Favorites', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.id
@@ -43,8 +43,9 @@ class Vehicle(db.Model):
         return '<Vehicle %r>' % self.id
 
 class Favorites(db.Model):
-    id       = db.Column(db.Integer, primary_key=True)
-    # iduser      = db.Column(db.Integer, db.ForeignKey("user.id", nullable=False))
+    id = db.Column(db.Integer, primary_key=True)
+    iduser= db.Column(db.Integer, db.ForeignKey('user.id'),
+        nullable=False)
     # idpersonaje = db.Column(db.Integer, db.ForeignKey("Personaje.idpersonaje"))
     # idplanet    = db.Column(db.Integer, db.ForeignKey("Planet.idplanet"))
     # idvehicle   = db.Column(db.Integer, db.ForeignKey("Vehicle.idvehicle"))
