@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Planet, Vehicle, Personaje, Favorites
 #from models import Person
 
 app = Flask(__name__)
@@ -37,6 +37,29 @@ def sitemap():
     return generate_sitemap(app)
 
 #ENDPOINTS 
+#Esto trae todos los personajes 
+@app.route('/personaje', methods=['GET'])
+def traer_todos_personaje():
+    personaje = Personaje.query.all()
+    results = list(map(lambda item: item.serialize(),personaje))
+    print(personaje)
+    response_body = {
+        "msg": "Hello, this is your GET /user response ",
+        "personajes": results
+    }
+#Esto trae un solo personaje
+@app.route('/personaje/<int:personaje_id>', methods=['GET'])
+def traer_solo_personaje(personaje_id):
+    personaje = Personaje.query.filter_by(id=personaje_id).first()
+    
+    print(personaje)
+    response_body = {
+        "msg": "Hello, this is your GET /user response ",
+         "results":personaje.serialize()
+    }
+
+    return jsonify(response_body), 200
+
 
 @app.route('/user', methods=['GET'])
 def handle_hello():
