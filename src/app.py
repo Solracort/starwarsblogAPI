@@ -89,6 +89,16 @@ def handle_user():
     }
     return jsonify(response_body), 200
 
+@app.route('/users/favorites/<int:user_id>', methods=['GET'])
+def traer_solo_favoritos1user(user_id):
+    favs = Favorites.query.filter_by(iduser=user_id).all()
+    results = list(map(lambda item: item.serialize(),favs))
+    response_body = {
+        "msg": "Hello, this is your GET 1 user fav response ",
+        "results": results
+    }
+    return jsonify(response_body), 200
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
