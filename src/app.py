@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Planet, Vehicle, Personaje, Favorites
+from models import db, User, Planet, Personaje, Favorites
 #from models import Person
 
 app = Flask(__name__)
@@ -44,30 +44,49 @@ def traer_todos_personaje():
     results = list(map(lambda item: item.serialize(),personaje))
     print(personaje)
     response_body = {
-        "msg": "Hello, this is your GET /user response ",
+        "msg": "Hello, this is your GET all characters response ",
         "personajes": results
     }
 #Esto trae un solo personaje
 @app.route('/personaje/<int:personaje_id>', methods=['GET'])
 def traer_solo_personaje(personaje_id):
     personaje = Personaje.query.filter_by(id=personaje_id).first()
-    
-    print(personaje)
     response_body = {
-        "msg": "Hello, this is your GET /user response ",
+        "msg": "Hello, this is your GET 1 character response ",
          "results":personaje.serialize()
     }
-
     return jsonify(response_body), 200
 
-
-@app.route('/user', methods=['GET'])
-def handle_hello():
-
+#Esto trae todos los planetas
+@app.route('/planeta', methods=['GET'])
+def traer_todos_planetas():
+    planeta = Planet.query.all()
+    results = list(map(lambda item: item.serialize(),planeta))
     response_body = {
-        "msg": "Hello, this is your GET /user response "
+        "msg": "Hello, this is your GET all Planets response ",
+        "planetas": results
     }
+    return jsonify(response_body), 200
 
+#Esto trae un planeta concreto
+@app.route('/planeta/<int:planeta_id>', methods=['GET'])
+def traer_solo_planeta(planeta_id):
+    planeta = Planet.query.filter_by(id=planeta_id).first()
+    response_body = {
+        "msg": "Hello, this is your GET 1 planet response ",
+        "results":planeta.serialize()
+    }
+    return jsonify(response_body), 200
+
+#Esto trae todos los usuarios
+@app.route('/users', methods=['GET'])
+def handle_user():
+    usuarios = User.query.all()
+    results = list(map(lambda item: item.serialize(),usuarios))
+    response_body = {
+        "msg": "Hello, this is your GET  ALL users response ",
+        "results": results
+    }
     return jsonify(response_body), 200
 
 # this only runs if `$ python src/app.py` is executed

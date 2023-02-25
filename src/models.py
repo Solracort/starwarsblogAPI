@@ -33,24 +33,6 @@ class Personaje(db.Model):
             "name": self.name
             # do not serialize the password, its a security breach
         }    
-    
-
-    
-class Vehicle(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False)
-    tabla_Favorites = db.relationship('Favorites', backref='vehicle', lazy=True)
-    
-    def __repr__(self):
-        return '<Vehicle %r>' % self.id
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "name": self.name
-            # do not serialize the password, its a security breach
-        }        
-
 class Planet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
@@ -69,10 +51,9 @@ class Planet(db.Model):
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     iduser= db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    idpersonaje = db.Column(db.Integer, db.ForeignKey("personaje.id"), nullable=False)
-    idplanet = db.Column(db.Integer, db.ForeignKey("planet.id"), nullable=False)
-    idvehicle = db.Column(db.Integer, db.ForeignKey("vehicle.id"), nullable=False)
-    
+    idpersonaje = db.Column(db.Integer, db.ForeignKey("personaje.id"))
+    idplanet = db.Column(db.Integer, db.ForeignKey("planet.id"))
+        
     def __repr__(self):
         return '<Favorites %r>' % self.id
 
@@ -82,13 +63,5 @@ class Favorites(db.Model):
             "user": self.iduser,
             "personaje": self.idpersonaje,
             "planet": self.idplanet,
-            "vehicle":self.idvehicle
             # do not serialize the password, its a security breach
         }    
-        
-
-   
-    
-    
-
-    
