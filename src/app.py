@@ -88,7 +88,7 @@ def handle_user():
         "results": results
     }
     return jsonify(response_body), 200
-
+#Listamos todos los favoritos de un id de usuario 
 @app.route('/users/favorites/<int:user_id>', methods=['GET'])
 def traer_solo_favoritos1user(user_id):
     favs = Favorites.query.filter_by(iduser=user_id).all()
@@ -98,6 +98,18 @@ def traer_solo_favoritos1user(user_id):
         "results": results
     }
     return jsonify(response_body), 200
+
+#Eliminamos un planet favorito para un usuario
+@app.route('/favorite/planet/<int:planet_id>', methods=['DELETE'])
+def borrar_solo_favoritos1planeta(planet_id):
+    favs = Favorites.query.filter_by(idplanet=planet_id).all()
+    results = list(map(lambda item: item.serialize(),favs))
+    response_body = {
+        "msg": "Hello, this is your GET 1 user fav response ",
+        "results": results
+    }
+    return jsonify(response_body), 200
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
