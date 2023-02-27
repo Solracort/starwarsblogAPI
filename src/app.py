@@ -100,21 +100,26 @@ def traer_solo_favoritos1user(user_id):
     return jsonify(response_body), 200
 
 #Eliminamos un planet favorito para un usuario
-@app.route('/favorite/planet/delete/<int:planet_id>', methods=['POST'])
-def borrar_solo_favoritos1planeta(planet_id):
-    
-    # favs = Favorites.query.filter_by(idplanet=planet_id).all()
-    # results = list(map(lambda item: item.serialize(),favs))
+@app.route('/favorites/planet/<int:planet_id>', methods=['DELETE'])
+def delete_planet_fav(planet_id):
     request_body=request.json
-    del_fav = Favorites(iduser=request_body["iduser"],idplanet = planet_id)
-    
-    db.session.delete(del_fav)
+    del_planet= Favorites.query.filter_by(iduser=request_body["iduser"]).first()
+    db.session.delete(del_planet)
     db.session.commit()
-    
     response_body = {
-        "msg": "Hello, fav planet erased ",
-        # "results": results
-    }
+            "msg": "El planeta ha sido eliminado como favorito con éxito",
+        }
+    return jsonify(response_body), 200
+#Eliminamos un personaje favorito para un usuario
+@app.route('/favorites/personaje/<int:pers_id>', methods=['DELETE'])
+def delete_pers_fav(pers_id):
+    request_body=request.json
+    del_pers= Favorites.query.filter_by(iduser=request_body["iduser"], idpersonaje=pers_id).first()
+    db.session.delete(del_pers)
+    db.session.commit()
+    response_body = {
+            "msg": "El personaje ha sido eliminado como favorito con éxito",
+        }
     return jsonify(response_body), 200
 
 # crear planeta favorito
@@ -135,12 +140,9 @@ def create_planet_fav(planet_id):
 @app.route('/favorite/personaje/<int:pers_id>', methods=['POST'])
 def create_personaje_fav(pers_id):
     request_body=request.json
-   
     pers_fav = Favorites(iduser=request_body["iduser"],idpersonaje = pers_id)
-
     db.session.add(pers_fav)
     db.session.commit()
-  
     response_body = {
             "msg": "El personaje ha sido creado como favorito con éxito",
         }
